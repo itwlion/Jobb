@@ -13,4 +13,6 @@ for i in jobs:
     salary = i["salary"]
     job_list.append([id, url, title, company_name, category, salary])
 for chances in job_list:
-    print(chances)
+    job_list.append(chances)
+    break
+print(job_list[0])
