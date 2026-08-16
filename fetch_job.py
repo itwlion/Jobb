@@ -30,11 +30,4 @@ cur.executemany(
     "INSERT OR IGNORE INTO jobs (Id,url,title,companyname,category,salary) VALUES (?,?,?,?,?,?)",
     job_list
 )
-print("Table is rady")
-
-cur.execute("SELECT * FROM jobs")
-rows = cur.fetchall()
-print("-----DataBase-----")
-for row in rows:
-    print(row)
 con.close()
