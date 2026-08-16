@@ -15,4 +15,3 @@ for i in jobs:
 for chances in job_list:
     job_list.append(chances)
     break
-print(job_list[0])
