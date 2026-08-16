@@ -1,4 +1,5 @@
 import requests
+import sqlite3
 jet = requests.get("https://remotive.com/api/remote-jobs")
 jet = jet.json()
 jobs = jet["jobs"]
@@ -12,6 +13,28 @@ for i in jobs:
     category = i["category"]
     salary = i["salary"]
     job_list.append([id, url, title, company_name, category, salary])
-for chances in job_list:
-    job_list.append(chances)
-    break
+con = sqlite3.connect("jobs.db")
+cur = con.cursor()
+cur.execute("""
+            CREATE TABLE IF NOT EXISTS jobs(
+                Id INTEGER PRIMARY KEY,
+                Url TEXT,
+                Title TEXT,
+                CompanyName TEXT,
+                Category TEXT,
+                Salary TEXT
+            )
+            """
+            )
+cur.executemany(
+    "INSERT OR IGNORE INTO jobs (Id,url,title,companyname,category,salary) VALUES (?,?,?,?,?,?)",
+    job_list
+)
+print("Table is rady")
+
+cur.execute("SELECT * FROM jobs")
+rows = cur.fetchall()
+print("-----DataBase-----")
+for row in rows:
+    print(row)
+con.close()
