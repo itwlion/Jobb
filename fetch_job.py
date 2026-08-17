@@ -65,8 +65,6 @@ try:
         max_completion_tokens=2000,
         max_retries=5
     )
-    with open("cv.txt", "r") as f:
-        cv = f.read()
     formatted_jobs = "\n".join(
         [
             f'{row[0]}|{row[2]}|{row[3]}|{row[4]}|{row[5]}'
