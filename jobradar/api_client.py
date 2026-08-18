@@ -2,12 +2,19 @@ import requests
 r = requests.get("https://remotive.com/api/remote-jobs")
 r = r.json()
 jobs = r["jobs"]
-every_job = []
+every_job_id = []
+every_job__url = []
+every_job_title = []
+every_job_category = []
+every_job_type = []
+every_job_date = []
+every_job_type = []
+every_job_salary = []
 for each_job in jobs:
-    every_job.append([f"Id : {each_job["id"]}",
-                      f"URL : {each_job["url"]}",
-                      f"Title : {each_job["title"]}",
-                     f"Category : {each_job["category"]}",
-                     f"Job Type : {each_job["job_type"]}",
-                     f"Date Posted : {each_job["publication_date"]}"
-                      ])
+    every_job_id.append(each_job["id"])
+    every_job__url.append(each_job["url"])
+    every_job_category.append(each_job["category"])
+    every_job_date.append(each_job["publication_date"])
+    every_job_title.append(each_job["title"])
+    every_job_salary.append(each_job["salary"])
+    every_job_type.append(each_job["job_type"])
