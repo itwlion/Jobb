@@ -11,4 +11,3 @@ for each_job in jobs:
                      f"Job Type : {each_job["job_type"]}",
                      f"Date Posted : {each_job["publication_date"]}"
                       ])
-print(every_job)
