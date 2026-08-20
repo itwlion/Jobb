@@ -24,3 +24,5 @@ Tasks:
 """)
 ai_response(response.output_text)
 request_timeout = 40
+job = DB[0]
+job_id = job[0]
