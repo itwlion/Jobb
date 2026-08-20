@@ -1,3 +1,4 @@
+import hashlib
 from storage import ai_response
 from openai import OpenAI
 from config import load_dotenv
@@ -6,9 +7,11 @@ from storage import ai_response
 from storage import get_response
 CV = open("C:\\Users\\PC\\Desktop\\hsenPYTH\\jobradar\\jobradar\\cv.txt", "r")
 CV = CV.read()
+CVh = hashlib.sha256(CV.encode())
+CVh = CVh.hexdigest()
 job = DB[0]
 job_id = job[0]
-cached = get_response(job_id)
+cached = get_response(job_id, CVh)
 if cached:
     print("Using Cache:")
     print(cached)
@@ -31,5 +34,5 @@ else:
     3. Write a tailored, professional cover letter for the #1 best match.
     """)
     output = response.output_text
-    ai_response(job_id, output)
+    ai_response(job_id, CVh, output)
     print(output)
