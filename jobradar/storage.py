@@ -32,12 +32,13 @@ conn = sqlite3.connect("Responses.db")
 curs = conn.cursor()
 curs.execute("""
              CREATE TABLE IF NOT EXISTS responses(
-                 id INTEGER PRIMARY KEY AUTOINCREMENT,
+                 job_id INTEGER PRIMARY KEY AUTOINCREMENT,
                  response TEXT
              )
              """)
 
 
 def ai_response(output):
-    curs.execute("INSERT INTO responses(response) VALUES (?)", (output,))
+    curs.execute(
+        "INSERT INTO responses(job_id,response) VALUES (?,?)", (job_id, output,))
     conn.commit()
