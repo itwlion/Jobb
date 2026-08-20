@@ -1,6 +1,8 @@
+from storage import ai_response
 from openai import OpenAI
 from config import load_dotenv
 from storage import DB
+from storage import ai_response
 CV = open("C:\\Users\\PC\\Desktop\\hsenPYTH\\jobradar\\jobradar\\cv.txt", "r")
 CV = CV.read()
 client = OpenAI()
@@ -20,6 +22,5 @@ Tasks:
 2. For each match, provide: Job Title, Match Score (0-100), and a 1-sentence justification.
 3. Write a tailored, professional cover letter for the #1 best match.
 """)
+ai_response(response.output_text)
 request_timeout = 40
-
-output = response.output_text
