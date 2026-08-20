@@ -32,22 +32,24 @@ conn = sqlite3.connect("Responses.db")
 curs = conn.cursor()
 curs.execute("""
              CREATE TABLE IF NOT EXISTS responses(
-                 job_id INTEGER PRIMARY KEY AUTOINCREMENT,
-                 response TEXT
+                 job_id INTEGER,
+                 cv_hash TEXT,
+                 response TEXT,
+                 PRIMARY KEY(job_id,cv_hash)
              )
              """)
 
 
-def ai_response(job_id, output):
+def ai_response(job_id, cv_hash, output):
     curs.execute(
-        "INSERT INTO responses(job_id,response) VALUES (?,?)", (job_id, output,))
+        "INSERT INTO responses(job_id,cv_hash,response) VALUES (?,?,?)", (job_id, cv_hash, output,))
     conn.commit()
 
 
-def get_response(job_id):
+def get_response(job_id, cv_hash):
     curs.execute(
-        "SELECT response FROM responses WHERE job_id =?",
-        (job_id,)
+        "SELECT response FROM responses WHERE job_id =? AND cv_hash =?",
+        (job_id, cv_hash,)
     )
     result = curs.fetchone()
     if result:
