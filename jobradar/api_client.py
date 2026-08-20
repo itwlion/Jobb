@@ -1,5 +1,5 @@
 import requests
-r = requests.get("https://remotive.com/api/remote-jobs")
+r = requests.get("https://remotive.com/api/remote-jobs", timeout=7)
 r = r.json()
 jobs = r["jobs"]
 every_job_id = []
