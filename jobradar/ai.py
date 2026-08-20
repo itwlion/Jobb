@@ -22,4 +22,4 @@ Tasks:
 """)
 request_timeout = 40
 
-print(response.output_text)
+output = response.output_text
