@@ -28,3 +28,16 @@ DB = []
 for row in cur.execute("SELECT * FROM jobs"):
     DB.append(row)
 con.close()
+conn = sqlite3.connect("Responses.db")
+curs = conn.cursor()
+curs.execute("""
+             CREATE TABLE IF NOT EXISTS responses(
+                 id INTEGER PRIMARY KEY AUTOINCREMENT,
+                 response TEXT
+             )
+             """)
+
+
+def ai_response(output):
+    curs.execute("INSERT INTO responses(response) VALUES (?)", (output,))
+    conn.commit()
