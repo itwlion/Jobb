@@ -38,7 +38,18 @@ curs.execute("""
              """)
 
 
-def ai_response(output):
+def ai_response(job_id, output):
     curs.execute(
         "INSERT INTO responses(job_id,response) VALUES (?,?)", (job_id, output,))
     conn.commit()
+
+
+def get_response(job_id):
+    curs.execute(
+        "SELECT response FROM responses WHERE job_id =?",
+        (job_id,)
+    )
+    result = curs.fetchone()
+    if result:
+        return result[0]
+    return None
