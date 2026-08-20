@@ -8,9 +8,23 @@ from api_client import every_job_date
 import sqlite3
 con = sqlite3.connect("JOBS.db")
 cur = con.cursor()
-cur.execute(
-    "CREATE TABLE IF NOT EXISTS jobs(id PRIMARY KEY,url,title,category,job_type,date_posted,salary)")
+cur.execute("""
+            CREATE TABLE IF NOT EXISTS jobs(
+                id PRIMARY KEY,
+                url,
+                title,
+                category,
+                job_type,
+                date_posted,
+                salary
+                )
+            """)
 zipped_lists = zip(every_job_id, every_job__url, every_job_title,
                    every_job_category, every_job_type, every_job_date, every_job_salary)
-cur.executemany('INSERT INTO jobs VALUES (?,?,?,?,?,?,?)', zipped_lists)
+cur.executemany(
+    'INSERT OR REPLACE INTO jobs VALUES (?,?,?,?,?,?,?)', zipped_lists)
 con.commit()
+DB = []
+for row in cur.execute("SELECT * FROM jobs"):
+    DB.append(row)
+con.close()
