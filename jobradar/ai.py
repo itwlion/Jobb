@@ -19,6 +19,7 @@ Tasks:
 1. Identify the top job matches.
 2. For each match, provide: Job Title, Match Score (0-100), and a 1-sentence justification.
 3. Write a tailored, professional cover letter for the #1 best match.
-"""
-)
+""")
+request_timeout = 20
+
 print(response.output_text)
