@@ -1,4 +1,5 @@
 import hashlib
+import json
 from storage import ai_response
 from groq import Groq
 from config import load_dotenv
@@ -8,7 +9,7 @@ from storage import get_response
 CV = open("C:\\Users\\PC\\Desktop\\hsenPYTH\\jobradar\\jobradar\\cv.txt",
           "r", encoding="utf-8")
 CV = CV.read()
-if not CV.Strip():
+if not CV.strip():
     print("Your CV is empty")
     exit()
 CVh = hashlib.sha256(CV.encode())
@@ -40,9 +41,15 @@ else:
         1. Identify the top job matches.
         2. For each match, provide: Job Title, Match Score (0-100), and a 1-sentence justification.
         3. Write a tailored, professional cover letter for the #1 best match.
+        4. return  the response as a valid JSON
     """}]
     )
     print(f"New Ai Calls : {ai_call}")
     output = response.choices[0].message.content
-    ai_response(job_id, CVh, output)
-    print(output)
+    try:
+        answer = json.loads(output)
+    except json.JSONDecodeError:
+        print("AI returned invalid JSON.")
+    else:
+        ai_response(job_id, CVh, output)
+        print(output)
