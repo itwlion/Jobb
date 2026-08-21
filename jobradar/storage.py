@@ -6,9 +6,9 @@ from api_client import every_job_title
 from api_client import every_job_category
 from api_client import every_job_date
 import sqlite3
-con = sqlite3.connect("JOBS.db")
-cur = con.cursor()
-cur.execute("""
+with sqlite3.connect("JOBS.db") as con:
+    cur = con.cursor()
+    cur.execute("""
             CREATE TABLE IF NOT EXISTS jobs(
                 id INTEGER PRIMARY KEY,
                 url,
@@ -19,15 +19,13 @@ cur.execute("""
                 salary
                 )
             """)
-zipped_lists = zip(every_job_id, every_job__url, every_job_title,
-                   every_job_category, every_job_type, every_job_date, every_job_salary)
-cur.executemany(
-    'INSERT OR IGNORE INTO jobs VALUES (?,?,?,?,?,?,?)', zipped_lists)
-con.commit()
-DB = []
-for row in cur.execute("SELECT * FROM jobs"):
-    DB.append(row)
-con.close()
+    zipped_lists = zip(every_job_id, every_job__url, every_job_title,
+                       every_job_category, every_job_type, every_job_date, every_job_salary)
+    cur.executemany(
+        'INSERT OR IGNORE INTO jobs VALUES (?,?,?,?,?,?,?)', zipped_lists)
+    DB = []
+    for row in cur.execute("SELECT * FROM jobs"):
+        DB.append(row)
 conn = sqlite3.connect("Responses.db")
 curs = conn.cursor()
 curs.execute("""
