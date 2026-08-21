@@ -8,7 +8,8 @@ def save_jobs(
     every_job_category,
     every_job_type,
     every_job_date,
-    every_job_salary
+    every_job_salary,
+    every_job_old
 ):
     with sqlite3.connect("JOBS.db") as con:
         cur = con.cursor()
@@ -25,9 +26,9 @@ def save_jobs(
                     )
                 """)
         zipped_lists = zip(every_job_id, every_job__url, every_job_title,
-                           every_job_category, every_job_type, every_job_date, every_job_salary)
+                           every_job_category, every_job_type, every_job_date, every_job_salary, every_job_old)
         cur.executemany(
-            'INSERT OR IGNORE INTO jobs VALUES (?,?,?,?,?,?,?)', zipped_lists)
+            'INSERT OR IGNORE INTO jobs VALUES (?,?,?,?,?,?,?,?)', zipped_lists)
 
 
 conn = sqlite3.connect("Responses.db")
