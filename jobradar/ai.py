@@ -12,11 +12,13 @@ CVh = CVh.hexdigest()
 job = DB[0]
 job_id = job[0]
 cached = get_response(job_id, CVh)
+ai_call = 0
 if cached:
     print("Using Cache:")
     print(cached)
 else:
     client = Groq()
+    ai_call += 1
     response = client.chat.completions.create(
         model="openai/gpt-oss-120b",
         messages=[{"role": "user",
@@ -35,6 +37,7 @@ else:
         3. Write a tailored, professional cover letter for the #1 best match.
     """}]
     )
+    print(f"New Ai Calls : {ai_call}")
     output = response.choices[0].message.content
     ai_response(job_id, CVh, output)
     print(output)
