@@ -1,5 +1,20 @@
 import requests
 import time
+from datetime import datetime, timezone, timedelta
+
+
+def is_old(date_string):
+    try:
+        date = datetime.fromisoformat(
+            date_string.replace("Z", "+00:00")
+        )
+        if date.tzinfo is None:
+            date = date.replace(tzinfo=timezone.utc)
+        date = date.astimezone(timezone.utc)
+        seven_days_ago = datetime.now(timezone.utc) - timedelta(days=7)
+        return date < seven_days_ago
+    except (ValueError, TypeError):
+        return True
 
 
 class JobRadarError(Exception):
@@ -50,12 +65,15 @@ def fetch_jobs():
     every_job_category = []
     every_job_date = []
     every_job_type = []
+    every_job_old = []
     every_job_salary = []
     for each_job in jobs:
         every_job_id.append(each_job.get("id"))
         every_job__url.append(each_job.get("url"))
         every_job_category.append(each_job.get("category", "Undefined"))
-        every_job_date.append(each_job.get("publication_date", "Undefined"))
+        date = each_job.get("publication_date")
+        every_job_date.append(date)
+        every_job_old.append(is_old(date))
         every_job_title.append(each_job.get("title", "Undefined"))
         every_job_salary.append(each_job.get("salary", "Undefined"))
         every_job_type.append(each_job.get("job_type", "Undefined"))
@@ -66,5 +84,6 @@ def fetch_jobs():
         every_job_category,
         every_job_date,
         every_job_type,
-        every_job_salary
+        every_job_salary,
+        every_job_old
     )
