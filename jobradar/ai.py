@@ -1,6 +1,6 @@
 import hashlib
 from storage import ai_response
-from openai import OpenAI
+from groq import Groq
 from config import load_dotenv
 from storage import DB
 from storage import ai_response
@@ -16,23 +16,25 @@ if cached:
     print("Using Cache:")
     print(cached)
 else:
-    client = OpenAI()
-    response = client.responses.create(
-        model="gpt-5.6",
-        input=f"""
-    Analyze the candidate CV against the job listings below.
+    client = Groq()
+    response = client.chat.completions.create(
+        model="openai/gpt-oss-120b",
+        messages=[{"role": "user",
+                   "content": f"""
+        Analyze the candidate CV against the job listings below.
 
-    CV:
-    {CV}
+        CV:
+        {CV}
 
-    Jobs:
-    {DB}
+        Jobs:
+        {DB}
 
-    Tasks:
-    1. Identify the top job matches.
-    2. For each match, provide: Job Title, Match Score (0-100), and a 1-sentence justification.
-    3. Write a tailored, professional cover letter for the #1 best match.
-    """)
-    output = response.output_text
+        Tasks:
+        1. Identify the top job matches.
+        2. For each match, provide: Job Title, Match Score (0-100), and a 1-sentence justification.
+        3. Write a tailored, professional cover letter for the #1 best match.
+    """}]
+    )
+    output = response.choices[0].message.content
     ai_response(job_id, CVh, output)
     print(output)
