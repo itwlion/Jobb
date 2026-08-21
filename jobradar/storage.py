@@ -20,7 +20,8 @@ def save_jobs(
                     category,
                     job_type,
                     date_posted,
-                    salary
+                    salary,
+                    is_old
                     )
                 """)
         zipped_lists = zip(every_job_id, every_job__url, every_job_title,
