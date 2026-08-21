@@ -15,27 +15,27 @@ if not CV.strip():
 CVh = hashlib.sha256(CV.encode())
 CVh = CVh.hexdigest()
 DB = get_jobs()
-job = DB[0]
-job_id = job[0]
-cached = get_response(job_id, CVh)
 ai_call = 0
-if cached:
-    print("Using Cache:")
-    print(cached)
-else:
-    client = Groq()
-    ai_call += 1
-    response = client.chat.completions.create(
-        model="openai/gpt-oss-120b",
-        messages=[{"role": "user",
-                   "content": f"""
+for job in DB:
+    job_id = job[0]
+    cached = get_response(job_id, CVh)
+    if cached:
+        print("Using Cache:")
+        print(cached)
+    else:
+        client = Groq()
+        ai_call += 1
+        response = client.chat.completions.create(
+            model="openai/gpt-oss-120b",
+            messages=[{"role": "user",
+                       "content": f"""
         Analyze the candidate CV against the job listings below.
 
         CV:
         {CV}
 
         Jobs:
-        {DB}
+        {job}
 
         Tasks:
         1. Identify the top job matches.
@@ -43,8 +43,7 @@ else:
         3. Write a tailored, professional cover letter for the #1 best match.
         4. return  the response as a valid JSON
     """}]
-    )
-    print(f"New Ai Calls : {ai_call}")
+        )
     output = response.choices[0].message.content
     try:
         answer = json.loads(output)
@@ -53,3 +52,4 @@ else:
     else:
         ai_response(job_id, CVh, output)
         print(output)
+print(f"New Ai Calls : {ai_call}")
