@@ -2,13 +2,18 @@ import hashlib
 from storage import ai_response
 from groq import Groq
 from config import load_dotenv
-from storage import DB
+from storage import get_jobs
 from storage import ai_response
 from storage import get_response
-CV = open("C:\\Users\\PC\\Desktop\\hsenPYTH\\jobradar\\jobradar\\cv.txt", "r")
+CV = open("C:\\Users\\PC\\Desktop\\hsenPYTH\\jobradar\\jobradar\\cv.txt",
+          "r", encoding="utf-8")
 CV = CV.read()
+if not CV.Strip():
+    print("Your CV is empty")
+    exit()
 CVh = hashlib.sha256(CV.encode())
 CVh = CVh.hexdigest()
+DB = get_jobs()
 job = DB[0]
 job_id = job[0]
 cached = get_response(job_id, CVh)
