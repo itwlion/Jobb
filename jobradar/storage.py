@@ -10,7 +10,7 @@ con = sqlite3.connect("JOBS.db")
 cur = con.cursor()
 cur.execute("""
             CREATE TABLE IF NOT EXISTS jobs(
-                id PRIMARY KEY,
+                id INTEGER PRIMARY KEY,
                 url,
                 title,
                 category,
@@ -22,7 +22,7 @@ cur.execute("""
 zipped_lists = zip(every_job_id, every_job__url, every_job_title,
                    every_job_category, every_job_type, every_job_date, every_job_salary)
 cur.executemany(
-    'INSERT OR REPLACE INTO jobs VALUES (?,?,?,?,?,?,?)', zipped_lists)
+    'INSERT OR IGNORE INTO jobs VALUES (?,?,?,?,?,?,?)', zipped_lists)
 con.commit()
 DB = []
 for row in cur.execute("SELECT * FROM jobs"):
