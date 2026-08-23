@@ -32,20 +32,38 @@ def analyze_job():
                 model="openai/gpt-oss-120b",
                 messages=[{"role": "user",
                            "content": f"""
-            Analyze the candidate CV against the job listings below.
+            Analyze the candidate's CV against the job description.
 
-            CV:
-            {CV}
+CV:
+{CV}
 
-            Jobs:
-            {job}
+Job:
+{job}
 
-            Tasks:
-            1. Identify the top job matches.
-            2. For each match, provide: Job Title, Match Score (0-100), and a 1-sentence justification.
-            #1 best match.
-            3. Write a tailored, professional cover letter for the best job
-            4. return  the response as a valid JSON
+Return ONLY valid JSON.
+
+The JSON must contain exactly these five fields:
+
+{
+                               "score": 0,
+  "matched_skills": [],
+  "missing_skills": [],
+  "reason": "",
+  "seniority": ""
+}
+
+Rules:
+- "score" must be an integer from 0 to 100.
+- "matched_skills" must be a list of skills the candidate has that match the job.
+- "missing_skills" must be a list of important skills required by the job that are missing from the CV.
+- "reason" must be a short explanation of why the score was given.
+- "seniority" must describe the appropriate level for the candidate/job, such as "junior", "mid", or "senior".
+- Only use information actually present in the CV and job description.
+- Do not invent skills, experience, education, or qualifications.
+- Do not use Markdown.
+- Do not put the JSON inside ```.
+
+Return nothing except the JSON.
         """}]
             )
             output = response.choices[0].message.content
