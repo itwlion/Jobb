@@ -1,9 +1,10 @@
+from models import Job
 import requests
 import time
 from datetime import datetime, timezone, timedelta
 
 
-def is_old(date_string):
+def old_status(date_string):
     try:
         date = datetime.fromisoformat(
             date_string.replace("Z", "+00:00")
@@ -43,7 +44,8 @@ def fetch_jobs():
                 continue
             if 500 <= r.status_code < 600:
                 if attempt == 4:
-                    raise ApiUnavailableError("Api Failed after 5 attempts")
+                    raise ApiUnavailableError(
+                        "Api Failed after 5 attempts")
                 wait = 2 ** attempt
                 print(f'Request Failed. Retryin in {wait} seconds.')
                 time.sleep(wait)
@@ -59,31 +61,18 @@ def fetch_jobs():
 
     r = r.json()
     jobs = r["jobs"]
-    every_job_id = []
-    every_job__url = []
-    every_job_title = []
-    every_job_category = []
-    every_job_date = []
-    every_job_type = []
-    every_job_old = []
-    every_job_salary = []
+    Full_Jobs = []
     for each_job in jobs:
-        every_job_id.append(each_job.get("id"))
-        every_job__url.append(each_job.get("url"))
-        every_job_category.append(each_job.get("category", "Undefined"))
-        date = each_job.get("publication_date")
-        every_job_date.append(date)
-        every_job_old.append(is_old(date))
-        every_job_title.append(each_job.get("title", "Undefined"))
-        every_job_salary.append(each_job.get("salary", "Undefined"))
-        every_job_type.append(each_job.get("job_type", "Undefined"))
-    return (
-        every_job_id,
-        every_job__url,
-        every_job_title,
-        every_job_category,
-        every_job_date,
-        every_job_type,
-        every_job_salary,
-        every_job_old
-    )
+        date = each_job.get("publication_date", "Undefined")
+        each_job = Job(
+            id=each_job.get("id"),
+            url=each_job.get("url", "Undeifned"),
+            title=each_job.get("title", "Undefinde"),
+            category=each_job.get("category", "Undefined"),
+            job_type=each_job.get("job_type", "Undefined"),
+            date_posted=date,
+            salary=each_job.get("salary", "Undefined"),
+            is_old=old_status(date)
+        )
+        Full_Jobs.append(each_job)
+    return Full_Jobs
