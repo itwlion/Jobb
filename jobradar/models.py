@@ -1,0 +1,13 @@
+from dataclasses import dataclass
+
+
+@dataclass
+class Job:
+    id: int
+    url: str
+    title: str
+    category: str
+    job_type: str
+    date_posted: str
+    salary: str
+    is_old: bool
