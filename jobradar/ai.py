@@ -71,7 +71,7 @@ Return nothing except the JSON.
                 for attempts in range(2):
                     answer = json.loads(output)
                     if type(answer) == dict:
-                        if type(answer["matchscore"]) == int and 0 <= answer["matchscore"] <= 100:
+                        if type(answer["score"]) == int and 0 <= answer["score"] <= 100:
                             ai_response(job_id, CVh, output)
                             break
                         else:
@@ -84,8 +84,8 @@ Return nothing except the JSON.
 Return ONLY valid JSON.
 
 Rules:
-- Use exactly these fields: matchscore, job_title, justification, cover_letter
-- matchscore MUST be an integer between 0 and 100.
+- Use exactly these fields: score, matched_skills, missing_skills, reason,seniority
+- score MUST be an integer between 0 and 100.
 - 0 and 100 are valid.
 - Do not use markdown.
 - Do not add any text before or after the JSON.
@@ -93,10 +93,11 @@ Rules:
 
 Example:
 {
-                                               "matchscore": 75,
-  "job_title": "Python Developer",
-  "justification": "The candidate has strong Python skills but lacks some required experience.",
-  "cover_letter": "Dear Hiring Manager..."
+                                               "score": 75,
+    "matched_skills": ["Python", "SQL"],
+    "missing_skills": ["Docker"],
+    "reason": "The candidate has strong Python and SQL skills but lacks Docker experience.",
+    "seniority": "junior"
 }
             """}]
                             )
@@ -105,8 +106,8 @@ Example:
                             answer = json.loads(output)
                             if attempts == 1:
                                 if type(answer) == dict:
-                                    if type(answer["matchscore"]) == int:
-                                        if 0 > answer["matchscore"] or answer["matchscore"] > 100:
+                                    if type(answer["score"]) == int:
+                                        if 0 > answer["score"] or answer["score"] > 100:
                                             ai_response(
                                                 job_id, CVh, "unscored")
                                             break
