@@ -11,3 +11,12 @@ class Job:
     date_posted: str
     salary: str
     is_old: bool
+
+
+@dataclass
+class Match:
+    score: int
+    matched_skills: list
+    missing_skills: list
+    reason: str
+    seniority: str
