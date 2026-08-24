@@ -9,7 +9,7 @@ from .storage import get_response
 
 
 def analyze_job():
-    CV = open("jobradar\\jobradar\\cv.txt",
+    CV = open("C:\\Users\\PC\\Desktop\\hsenPYTH\\jobradar\\jobradar\\cv.txt",
               "r", encoding="utf-8")
     CV = CV.read()
     if not CV.strip():
@@ -20,7 +20,7 @@ def analyze_job():
     DB = get_jobs()
     ai_call = 0
     for job in DB:
-        job_id = job[0]
+        job_id = job.id
         cached = get_response(job_id, CVh)
         if cached:
             print("Using Cache:")
@@ -44,13 +44,13 @@ Return ONLY valid JSON.
 
 The JSON must contain exactly these five fields:
 
-{
+{{
                                "score": 0,
   "matched_skills": [],
   "missing_skills": [],
   "reason": "",
   "seniority": ""
-}
+}}
 
 Rules:
 - "score" must be an integer from 0 to 100.
@@ -117,3 +117,4 @@ Example:
             except json.JSONDecodeError:
                 ai_response(job_id, CVh, "unscored")
     print(f"New Ai Calls : {ai_call}")
+    return response
