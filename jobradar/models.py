@@ -20,3 +20,4 @@ class Match:
     missing_skills: list
     reason: str
     seniority: str
+    letter: str = ""
