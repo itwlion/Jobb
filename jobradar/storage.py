@@ -71,7 +71,7 @@ def get_response(job_id, cv_hash):
     )
     result = curs.fetchone()
     if result:
-        data = json.loads(result)
+        data = json.loads(result[0])
         return Match(
             score=data["score"],
             matched_skills=data["matched_skills"],
