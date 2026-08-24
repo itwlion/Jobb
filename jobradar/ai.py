@@ -1,6 +1,6 @@
 import hashlib
 import json
-from .models import Match
+from .models import Match, Job
 from .storage import ai_response
 from groq import Groq
 from .config import load_dotenv
@@ -36,6 +36,7 @@ def analyze_job():
                 seniority=cached.seniority,
                 letter=cached.letter
             )
+            print(f"id: {job.id} | title: {job.title} | score: {crrct.score}")
             if crrct.score > best_score:
                 best_score = crrct.score
                 best_job = job
@@ -57,14 +58,15 @@ Job:
 
 Return ONLY valid JSON.
 
-The JSON must contain exactly these five fields:
+The JSON must contain exactly these six fields:
 
 {{
                                "score": 0,
   "matched_skills": [the skills that match],
   "missing_skills": [the skills that are missing],
   "reason": "justification",
-  "seniority": "junior,mid,senior"
+  "seniority": "junior,mid,senior",
+  "letter" : "create a letter for apllying to the best matching job"
 }}
 
 Rules:
@@ -73,7 +75,7 @@ Rules:
 - "missing_skills" must be a list of important skills required by the job that are missing from the CV.
 - "reason" must be a short explanation of why the score was given.
 - "seniority" must describe the appropriate level for the candidate/job, such as "junior", "mid", or "senior".
-- "letter" is a letter that you create for the best matching job according to score
+- "letter" create a letter for applying to the best matching job according to score
 - Only use information actually present in the CV and job description.
 - Do not invent skills, experience, education, or qualifications.
 - Do not use Markdown.
@@ -143,6 +145,8 @@ Example:
                     best_score = crrct.score
                     best_job = job
                     best_match_data = crrct
+                print(
+                    f"id: {job.id} | title: {job.title} | score: {crrct.score}")
             except json.JSONDecodeError:
                 ai_response(job_id, CVh, "unscored")
     print(f"New Ai Calls : {ai_call}")
