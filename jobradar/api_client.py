@@ -1,4 +1,4 @@
-from models import Job
+from .models import Job
 import requests
 import time
 from datetime import datetime, timezone, timedelta
