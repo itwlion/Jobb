@@ -1,4 +1,5 @@
-from .models import Job
+from .models import Match, Job
+import json
 import sqlite3
 
 
@@ -70,5 +71,12 @@ def get_response(job_id, cv_hash):
     )
     result = curs.fetchone()
     if result:
-        return result[0]
+        data = json.loads(result)
+        return Match(
+            score=data["score"],
+            matched_skills=data["matched_skills"],
+            missing_skills=data["missing_skills"],
+            reason=data["reason"],
+            seniority=data["seniority"]
+        )
     return None
