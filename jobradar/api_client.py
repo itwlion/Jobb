@@ -12,8 +12,8 @@ def old_status(date_string):
         if date.tzinfo is None:
             date = date.replace(tzinfo=timezone.utc)
         date = date.astimezone(timezone.utc)
-        seven_days_ago = datetime.now(timezone.utc) - timedelta(days=7)
-        return date < seven_days_ago
+        ninty_days_ago = datetime.now(timezone.utc) - timedelta(days=90)
+        return date < ninty_days_ago
     except (ValueError, TypeError):
         return True
 
