@@ -1,16 +1,13 @@
+from .models import Job
 import sqlite3
 
 
-def save_jobs(
-    every_job_id,
-    every_job__url,
-    every_job_title,
-    every_job_category,
-    every_job_type,
-    every_job_date,
-    every_job_salary,
-    every_job_old
-):
+def save_jobs(jobs):
+    jobs = [
+        (j.id, j.url, j.title, j.category, j.job_type,
+         j.date_posted, j.salary, j.is_old)
+        for j in jobs
+    ]
     with sqlite3.connect("JOBS.db") as con:
         cur = con.cursor()
         cur.execute("""
@@ -25,10 +22,8 @@ def save_jobs(
                     is_old
                     )
                 """)
-        zipped_lists = zip(every_job_id, every_job__url, every_job_title,
-                           every_job_category, every_job_type, every_job_date, every_job_salary, every_job_old)
         cur.executemany(
-            'INSERT OR IGNORE INTO jobs VALUES (?,?,?,?,?,?,?,?)', zipped_lists)
+            'INSERT OR IGNORE INTO jobs VALUES (?,?,?,?,?,?,?,?)', jobs)
 
 
 conn = sqlite3.connect("Responses.db")
