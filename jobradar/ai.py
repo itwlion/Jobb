@@ -9,7 +9,7 @@ from .storage import get_response
 
 
 def analyze_job():
-    CV = open("C:\\Users\\PC\\Desktop\\hsenPYTH\\jobradar\\jobradar\\cv.txt",
+    CV = open("jobradar\\jobradar\\cv.txt",
               "r", encoding="utf-8")
     CV = CV.read()
     if not CV.strip():
