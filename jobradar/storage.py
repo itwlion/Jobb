@@ -41,13 +41,20 @@ curs.execute("""
 def get_jobs():
     with sqlite3.connect("JOBS.db") as con:
         cur = con.cursor()
-
-        DB = []
-
+        jobs = []
         for row in cur.execute("SELECT * FROM jobs"):
-            DB.append(row)
-
-        return DB
+            job = Job(
+                id=row[0],
+                url=row[1],
+                title=row[2],
+                category=row[3],
+                job_type=row[4],
+                date_posted=row[5],
+                salary=row[6],
+                is_old=row[7]
+            )
+            jobs.append(job)
+        return jobs
 
 
 def ai_response(job_id, cv_hash, output):
