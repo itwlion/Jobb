@@ -93,6 +93,35 @@ def cmd_stats():
     print("-" * 50)
 
 
+def cmd_letter(job_id):
+    CV = open("C:\\Users\\PC\\Desktop\\hsenPYTH\\jobradar\\jobradar\\cv.txt",
+              "r", encoding="utf-8")
+    CV = CV.read()
+    if not CV.strip():
+        print("Your CV is empty")
+        return
+    CVh = hashlib.sha256(CV.encode())
+    CVh = CVh.hexdigest()
+    jobs = get_jobs()
+    found_job = None
+    for job in jobs:
+        if job.id == job_id:
+            found_job = job
+            break
+    if found_job is None:
+        print(f"Job of Id :{job_id} is not found.")
+        return
+    cached = get_response(job_id, CVh)
+    if cached is None:
+        print(f"No cached response found for this id : {job_id}")
+        return
+    if cached.letter:
+        print(cached.letter)
+    else:
+        print("No cover letter")
+    print("-" * 60)
+
+
 def main():
 
     parser = argparse.ArgumentParser()
@@ -102,11 +131,15 @@ def main():
     list_parser = subparsers.add_parser("list")
     list_parser.add_argument("--min-score", type=int, default=0)
     list_parser.add_argument("--limit", type=int, default=10)
+    letter_parser = subparsers.add_parser("letter")
+    letter_parser.add_argument("--job-id", type=int, required=True)
     args = parser.parse_args()
     if args.command == "fetch":
         cmd_fetch()
     elif args.command == "stats":
         cmd_stats()
+    elif args.command == "letter":
+        cmd_letter(args.job_id)
     elif args.command == "list":
         cmd_list(args.min_score, args.limit)
 
