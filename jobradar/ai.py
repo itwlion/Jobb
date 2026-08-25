@@ -5,7 +5,6 @@ from .storage import ai_response
 from groq import Groq
 from .config import load_dotenv
 from .storage import get_jobs
-from .storage import ai_response
 from .storage import get_response
 
 
