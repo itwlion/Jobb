@@ -150,7 +150,11 @@ Example:
                     job.title), "score": (crrct.score)})
             except json.JSONDecodeError:
                 ai_response(job_id, CVh, "unscored")
-    return {
-        "best_match": best_match_data,
-        "best_job": best_job
-    }
+    all_matches.sort(key=lambda x: x["score"], reverse=True)
+    if return_all:
+        return all_matches
+    else:
+        return {
+            "best_match": best_match_data,
+            "best_job": best_job
+        }
