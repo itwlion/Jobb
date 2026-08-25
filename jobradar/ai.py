@@ -8,7 +8,7 @@ from .storage import get_jobs
 from .storage import get_response
 
 
-def analyze_job():
+def analyze_job(return_all=False):
     CV = open("C:\\Users\\PC\\Desktop\\hsenPYTH\\jobradar\\jobradar\\cv.txt",
               "r", encoding="utf-8")
     CV = CV.read()
@@ -22,6 +22,7 @@ def analyze_job():
     best_score = -1
     best_job = None
     best_match_data = None
+    all_matches = []
     for job in DB:
         job_id = job.id
         cached = get_response(job_id, CVh)
@@ -35,7 +36,8 @@ def analyze_job():
                 seniority=cached.seniority,
                 letter=cached.letter
             )
-            print(f"id: {job.id} | title: {job.title} | score: {crrct.score}")
+            all_matches.append({"id": (job.id), "title": (
+                job.title), "score": (crrct.score)})
             if crrct.score > best_score:
                 best_score = crrct.score
                 best_job = job
@@ -144,11 +146,10 @@ Example:
                     best_score = crrct.score
                     best_job = job
                     best_match_data = crrct
-                print(
-                    f"id: {job.id} | title: {job.title} | score: {crrct.score}")
+                all_matches.append({"id": (job.id), "title": (
+                    job.title), "score": (crrct.score)})
             except json.JSONDecodeError:
                 ai_response(job_id, CVh, "unscored")
-    print(f"New Ai Calls : {ai_call}")
     return {
         "best_match": best_match_data,
         "best_job": best_job
