@@ -149,6 +149,21 @@ def cmd_summary(days):
     print("-" * 60)
 
 
+def cmd_score(cv_path, max_calls):
+    result = analyze_job(cv_path=cv_path, max_calls=max_calls)
+    if result:
+        print("Best Match:")
+        print(f"Job: {result['best_job'].title}")
+        print(f"Score: {result['best_match'].score}")
+        print(f"Matched Skills: {result['best_match'].matched_skills}")
+        print(f"Missing Skills: {result['best_match'].missing_skills}")
+        print(f"Reason: {result['best_match'].reason}")
+        print(f"Seniority: {result['best_match'].seniority}")
+        print(f"Cover Letter: {result['best_match'].letter}")
+    else:
+        print("No matches found.")
+
+
 def main():
 
     parser = argparse.ArgumentParser()
@@ -162,11 +177,16 @@ def main():
     list_parser.add_argument("--limit", type=int, default=10)
     letter_parser = subparsers.add_parser("letter")
     letter_parser.add_argument("--job-id", type=int, required=True)
+    score_parser = subparsers.add_parser("score")
+    score_parser.add_argument("--cv", type=str, required=True)
+    score_parser.add_argument("--max-calls", type=int, default=None)
     args = parser.parse_args()
     if args.command == "fetch":
         cmd_fetch()
     elif args.command == "stats":
         cmd_stats()
+    elif args.command == "score":
+        cmd_score(args.cv, args.max_calls)
     elif args.command == "letter":
         cmd_letter(args.job_id)
     elif args.command == "list":
