@@ -8,13 +8,15 @@ from .storage import get_jobs
 from .storage import get_response
 
 
-def analyze_job(return_all=False):
-    CV = open("C:\\Users\\PC\\Desktop\\hsenPYTH\\jobradar\\jobradar\\cv.txt",
-              "r", encoding="utf-8")
-    CV = CV.read()
-    if not CV.strip():
-        print("Your CV is empty")
-        exit()
+def analyze_job(return_all=False, cv_path=None, max_calls=None):
+    if cv_path is None:
+        cv_path = ("C:\\Users\\PC\\Desktop\\hsenPYTH\\jobradar\\jobradar\\cv.txt")
+    with open(cv_path, 'r', encoding="utf-8") as f:
+        CV = f.read()
+        if not CV.strip():
+            print("Your CV is empty")
+            exit()
+
     CVh = hashlib.sha256(CV.encode())
     CVh = CVh.hexdigest()
     DB = get_jobs()
@@ -44,6 +46,9 @@ def analyze_job(return_all=False):
                 best_job = job
                 best_match_data = crrct
         else:
+            if max_calls is not None and ai_call >= max_calls:
+                print(f'Reached max call limit ({max_calls})')
+                break
             client = Groq()
             ai_call += 1
             response = client.chat.completions.create(
