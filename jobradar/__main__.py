@@ -1,3 +1,4 @@
+from datetime import datetime
 import argparse
 from .api_client import fetch_jobs, ApiUnavailableError
 from .storage import save_jobs, get_jobs
@@ -122,12 +123,40 @@ def cmd_letter(job_id):
     print("-" * 60)
 
 
+def cmd_summary(days):
+    all_jobs = get_jobs()
+    total = 0
+    category_count = {}
+    today = datetime.now().date()
+    for job in all_jobs:
+        date_posted = datetime.strptime(
+            job.date_posted[:10], "%Y-%m-%d").date()
+        days_ago = (today - date_posted).days
+        if days_ago <= days:
+            total += 1
+            category_count[job.category] = category_count.get(
+                job.category, 0) + 1
+    print(f"Jobs in the Last {days} Days:")
+    print("-" * 60)
+    print(f"Total Jobs: {total}")
+    print()
+    print("Categories:")
+    if category_count:
+        for category, count in sorted(category_count.items(), key=lambda x: x[1], reverse=True):
+            print(f"  {category}: {count}")
+    else:
+        print("  No jobs found in this period")
+    print("-" * 60)
+
+
 def main():
 
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers(dest="command", required=True)
     stats_parser = subparsers.add_parser("stats")
     fetch_parser = subparsers.add_parser("fetch")
+    summary_parser = subparsers.add_parser("summary")
+    summary_parser.add_argument('--days', type=int, default=7)
     list_parser = subparsers.add_parser("list")
     list_parser.add_argument("--min-score", type=int, default=0)
     list_parser.add_argument("--limit", type=int, default=10)
@@ -142,6 +171,8 @@ def main():
         cmd_letter(args.job_id)
     elif args.command == "list":
         cmd_list(args.min_score, args.limit)
+    elif args.command == "summary":
+        cmd_summary(args.days)
 
 
 if __name__ == "__main__":
