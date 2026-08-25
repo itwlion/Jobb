@@ -38,6 +38,7 @@ def analyze_job(return_all=False):
             )
             all_matches.append({"id": (job.id), "title": (
                 job.title), "score": (crrct.score)})
+            print(all_matches)
             if crrct.score > best_score:
                 best_score = crrct.score
                 best_job = job
