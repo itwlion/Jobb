@@ -77,6 +77,7 @@ def get_response(job_id, cv_hash):
             matched_skills=data["matched_skills"],
             missing_skills=data["missing_skills"],
             reason=data["reason"],
-            seniority=data["seniority"]
+            seniority=data["seniority"],
+            letter=data["letter"]
         )
     return None
