@@ -73,7 +73,7 @@ The JSON must contain exactly these six fields:
   "missing_skills": [the skills that are missing],
   "reason": "justification",
   "seniority": "junior,mid,senior",
-  "letter" : "create a letter for apllying to the best matching job"
+  "letter" : "a professional cover letter written from the candidate's perspective, specifically for this job, addressed to the hiring manager"
 }}
 
 Rules:
@@ -122,7 +122,7 @@ Example:
     "missing_skills": ["Docker"],
     "reason": "The candidate has strong Python and SQL skills but lacks Docker experience.",
     "seniority": "junior",
-    "letter" : "letter created for applying to the best job according to score  "
+    "letter" : "a professional cover letter written from the candidate's perspective, specifically for this job, addressed to the hiring manager"
 }
             """}]
                             )
